@@ -1,0 +1,61 @@
+Datasets for sysinfosnapshot.
+
+1. Network/Fabric data
+	a. IP settings
+		1. DNS
+		2. Gateway
+		3. Routing info
+		4. Ip of all interfaces
+		5. Firewall information(iptables linux, windows ??)
+		6. SM 
+			a. packages installed - rpm -qa |grep opensm
+			b. master sm
+				1. MasterLID=(`/usr/sbin/sminfo |awk '{print $4}' `)
+					echo "IB fabric SM master is: (`/usr/sbin/smpquery nodedesc $MasterLID`) "
+					echo "All SMs in the fabric: "
+					SMS=(`/usr/sbin/saquery -s |grep base_lid |head -1| sed 's/\./ /g'|awk '{print $2}'`)
+					SMC=${#SMS[*]}
+
+					for ((i = 0; i< $SMC ; i++)); do
+					echo ""
+					echo ${SMS[$i]}
+					/usr/sbin/smpquery nodedesc ${SMS[$i]}
+					/usr/sbin/sminfo ${SMS[$i]}
+					echo ""
+	done
+	
+	b. IB settings
+		1. ib_stat
+		2. ibv_devinfo
+		3. ibnetdiscover
+		4. ibcheckerrors
+		5. ibdiagnet
+		6. sminfo
+		
+	
+	c. EN settings
+		1. Eth tool (windows variant possibly netstat/netsh?)
+			a. run for each interface
+			b. run for each interface with -i for what driver is running
+	
+	b. Physical interfaces (lspci etc, something else on windows)
+		1. psid
+		2. HCA GUID
+		3. 
+	c. ibdiagnet
+	d. ibcheckerrors
+
+
+
+
+
+
+4. Configurations
+	a. if Redhat/Centos
+		1. /etc/sysconfig/
+
+5 Processor info
+	a. numactl --hardware
+	--hardware, -H
+	Show inventory of available nodes on the system.
+	Numactl can set up policy for a SYSV shared memory segment or a file in 	shmfs/hugetlbfs.
